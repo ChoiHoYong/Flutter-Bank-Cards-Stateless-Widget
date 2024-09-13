@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Player {
-  String name;
-
-  Player({required this.name});
-}
-
 void main() {
-  var hoyong = Player(
-    name: 'hoyong',
-  );
-  print(hoyong); // hoyong
   runApp(App());
 }
 
