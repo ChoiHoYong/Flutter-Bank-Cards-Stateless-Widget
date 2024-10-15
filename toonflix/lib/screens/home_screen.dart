@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
@@ -34,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                Expanded(child: makeList(snapshot)),
+                Expanded(child: makeList(snapshot, context)),
               ],
             );
           }
@@ -46,25 +48,33 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 20,
+  ScrollConfiguration makeList(
+      AsyncSnapshot<List<WebtoonModel>> snapshot, context) {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+        },
       ),
-      separatorBuilder: (context, index) => const SizedBox(
-        width: 40,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 20,
+        ),
+        separatorBuilder: (context, index) => const SizedBox(
+          width: 40,
+        ),
+        scrollDirection: Axis.horizontal,
+        itemCount: snapshot.data!.length,
+        itemBuilder: (context, index) {
+          var webtoon = snapshot.data![index];
+          return Webtoon(
+            title: webtoon.title,
+            thumb: webtoon.thumb,
+            id: webtoon.id,
+          );
+        },
       ),
-      scrollDirection: Axis.horizontal,
-      itemCount: snapshot.data!.length,
-      itemBuilder: (context, index) {
-        var webtoon = snapshot.data![index];
-        return Webtoon(
-          title: webtoon.title,
-          thumb: webtoon.thumb,
-          id: webtoon.id,
-        );
-      },
     );
   }
 }
